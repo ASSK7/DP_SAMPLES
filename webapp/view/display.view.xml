@@ -1,0 +1,52 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.dpSalesRepo.controller.display"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:u="sap.ui.unified" xmlns:f='sap.ui.layout.form' xmlns:l='sap.ui.layout'>
+	<App>
+	</App>
+	<!--<App>-->
+	<!--	<pages>-->
+	<!--		<Page id='idPage' title="Data from CSV file">-->
+	<!--			<content>-->
+	<!--					<u:FileUploader id="fileUploader" name="myFileUpload" change="onhandleUpload" fileType="xlsx,csv"></u:FileUploader>-->
+	<!--				<Table id='idTable' items='{vbak>/Header}'>-->
+	<!--					<headerToolbar>-->
+	<!--						<Toolbar>-->
+	<!--							<ToolbarSpacer/>-->
+	<!--							<Button icon='sap-icon://sys-add' press='onAddRow'></Button>-->
+	<!--							<Button icon='sap-icon://excel-attachment' press='onDownload'></Button>-->
+	<!--							<u:FileUploader id="fileUploader" name="myFileUpload" change="onhandleUpload" fileType="xlsx,csv"></u:FileUploader>-->
+	<!--						</Toolbar>-->
+	<!--					</headerToolbar>-->
+	<!--					<columns>-->
+	<!--						<Column>-->
+	<!--							<Label text='Sales Order'></Label>-->
+	<!--						</Column>-->
+	<!--						<Column>-->
+	<!--							<Label text='Customer Name'></Label>-->
+	<!--						</Column>-->
+	<!--						<Column>-->
+	<!--							<Label text='Invoice'></Label>-->
+	<!--						</Column>-->
+	<!--						<Column>-->
+	<!--							<Label text='Inquiry'></Label>-->
+	<!--						</Column>-->
+	<!--						<Column>-->
+	<!--							<Label text='Billing/Delivery'></Label>-->
+	<!--						</Column>-->
+	<!--					</columns>-->
+	<!--					<items>-->
+	<!--						<ColumnListItem>-->
+	<!--							<cells>-->
+	<!--								<Text text='{vbak>vbap}'></Text>-->
+	<!--								<Text text='{vbak>kunnr}'></Text>-->
+	<!--								<Text text='{vbak>inv}'></Text>-->
+	<!--								<Text text='{vbak>inq}'></Text>-->
+	<!--								<Text text='{vbak>vbrp}'></Text>-->
+	<!--							</cells>-->
+	<!--						</ColumnListItem>-->
+	<!--					</items>-->
+	<!--				</Table>-->
+	<!--			</content>-->
+	<!--		</Page>-->
+	<!--	</pages>-->
+	<!--</App>-->
+</mvc:View>

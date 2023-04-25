@@ -1,0 +1,157 @@
+/* Enter your custom styles here */
+.orange{
+	background: #FF9933;
+}
+
+.white{
+	background: #FFFFFF;
+}
+
+.green{
+	background: #138808;
+}
+.top {
+      height: 60px;
+      width : 100px;
+      background-color: #ff9933;
+      background-image: linear-gradient(
+        128deg, rgba(89,72,21,0) 39%,
+        rgba(250,245,245,0.8474025974025974)
+        46%, rgba(89,72,21,0) 53%);
+    animation-name: wavy;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+ 
+  .middle {
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+  }
+  #__tile0 ,#__tile2,#__tile1{
+  	width : 650px;
+  }
+ 
+  .bottom {
+      height: 60px;
+      background-color: green;
+      background-image: linear-gradient(
+        128deg, rgba(89,72,21,0) 39%,
+        rgba(250,245,245,0.8474025974025974)
+        46%, rgba(89,72,21,0) 53%);
+    animation-name: wavy;
+    animation-duration: 8s;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+      
+  }
+  
+  .wheel {
+      /*position: relative;*/
+      background-image : url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Spinning_Ashoka_Chakra.gif');
+      background-position: center center;
+      background-repeat: no-repeat;
+      /*justify-content: center;*/
+      /*align-items: center;*/
+      background-size: 190px 180px;
+      
+
+      
+      
+      
+  }
+ 
+  .wheel .line {
+      height: 100%;
+      width: 1px;
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      background: darkblue;
+  }
+  
+   .line:nth-child(1) {
+      transform: rotate(15deg)
+  }
+ 
+  .line:nth-child(2) {
+      transform: rotate(30deg)
+  }
+ 
+  .line:nth-child(3) {
+      transform: rotate(45deg)
+  }
+ 
+  .line:nth-child(4) {
+      transform: rotate(60deg)
+  }
+ 
+  .line:nth-child(5) {
+      transform: rotate(75deg)
+  }
+ 
+  .line:nth-child(6) {
+      transform: rotate(90deg)
+  }
+ 
+  .line:nth-child(7) {
+      transform: rotate(105deg)
+  }
+ 
+  .line:nth-child(8) {
+      transform: rotate(120deg)
+  }
+ 
+  .line:nth-child(9) {
+      transform: rotate(135deg)
+  }
+ 
+  .line:nth-child(10) {
+      transform: rotate(150deg)
+  }
+ 
+  .line:nth-child(11) {
+      transform: rotate(165deg)
+  }
+ 
+  .line:nth-child(12) {
+      transform: rotate(180deg)
+  }
+ 
+  @keyframes wheel {
+    0%{
+      transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+  }
+  .wave{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(
+        128deg, rgba(89,72,21,0) 39%,
+        rgba(250,245,245,0.8474025974025974)
+        46%, rgba(89,72,21,0) 53%);
+    animation-name: wavy;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+ 
+  @keyframes wavy {
+     0%{
+      background-position:
+      -400px 0px, -400px 0px,
+      -400px 0px,-400px 0px;
+     }
+     100%{
+      background-position: 800px 0px,
+      800px 0px, 800px 0px, 800px 0px;
+     }
+   }
