@@ -272,6 +272,11 @@ sap.ui.define([
 										"icon": "sap-icon://refresh",
 										"tooltip": 'Refresh',
 										"press": [that.refresh, that]
+									}),
+									new sap.m.Button({
+										"icon": "sap-icon://action-settings",
+										"tooltip": 'Settings',
+										"press": [that.settings, that]
 									})
 
 								]
@@ -309,13 +314,22 @@ sap.ui.define([
 									})]
 								})
 							);
-
-							items.addCell(
-								new sap.m.Text({
-									"text": "{" + "vbak>" + hdrRow[x] + "}",
-									class: "mystyle"
-								})
-							);
+							if (x == 1) {
+								items.addCell(
+									new sap.m.Link({
+										"text": "{" + "vbak>" + hdrRow[x] + "}",
+										class: "mystyle",
+										"press" : [that.onLinkClick,that]
+									})
+								);
+							} else {
+								items.addCell(
+									new sap.m.Text({
+										"text": "{" + "vbak>" + hdrRow[x] + "}",
+										class: "mystyle"
+									})
+								);
+							}
 						}
 
 						//Adding input fields as filters
@@ -810,13 +824,300 @@ sap.ui.define([
 				this.oVidDialog.getContent()[0].setContent("<iframe width='470' height='345' " +
 					"src='https://www.youtube.com/embed/jDn2bn7_YSM?autoplay=1' allow='autoplay'>" +
 					"</iframe>");
-			
+
 			}
-				this.oVidDialog.open();
+			this.oVidDialog.open();
 		},
 		onVideoClose: function(oEvent) {
 			oEvent.getSource().getParent().getContent()[0].setContent('');
 			oEvent.getSource().getParent().close();
+		},
+		settings: function(oEvent) {
+			var data = [];
+			for (var i = 0; i < this.cells.length; i++) {
+				data.push({
+					columns: this.cells[i]
+				});
+			}
+
+			this.getView().getModel('vbak').setProperty('/columns', data);
+			var oTable = new sap.m.Table({
+				"mode": 'MultiSelect',
+				"headerToolbar": [
+					new sap.m.Toolbar({
+						"content": [
+							new sap.m.SearchField({
+								width: '30%',
+								search: [this.onColumnSearch, this]
+							})
+						]
+					})
+				],
+				"columns": [
+					new sap.m.Column({
+						"header": [
+							new sap.m.Label({
+								"text": `Columns(/${this.cells.length})`
+							})
+						]
+					})
+				],
+
+			});
+
+			var items = new sap.m.ColumnListItem({
+				"cells": [
+					new sap.m.Text({
+						"text": '{vbak>columns}'
+					})
+				]
+			});
+			oTable.bindItems('vbak>/columns', items);
+
+			var IconTabFilterColumns = new sap.m.IconTabFilter({
+				"text": 'Columns',
+				"content": [
+					oTable
+				]
+			});
+
+			var oSortSelect = new sap.m.Select({
+				"forceSelection": false,
+				"change": [this.sortSelect, this]
+			});
+			var oSortItems = new sap.ui.core.Item({
+				"key": '{vbak>columns}',
+				"text": '{vbak>columns}'
+			});
+			oSortSelect.bindItems('vbak>/columns', oSortItems);
+
+			var IconTabFilterSort = new sap.m.IconTabFilter({
+				"text": 'Sort',
+				"content": [
+					new sap.m.HBox({
+						"items": [
+							oSortSelect,
+							new sap.m.SegmentedButton({
+								buttons: [
+									new sap.m.Button({
+										"icon": 'sap-icon://sort-ascending',
+										"press": [this.sortAscDsc, this]
+									}),
+									new sap.m.Button({
+										"icon": 'sap-icon://sort-descending',
+										"press": [this.sortAscDsc, this]
+									})
+								]
+							}),
+
+							new sap.m.Text({
+								text: 'Ascending'
+							})
+							,
+							new sap.m.Button({
+								"icon": 'sap-icon://decline',
+								"type": 'Transparent',
+								"visible" : false,
+								"press": [this.decline, this]
+							})
+						]
+					})
+
+				]
+			});
+
+			var oFilterSelect = new sap.m.Select({
+				"forceSelection": false,
+				"change": [this.onFilterSelect, this]
+			});
+			var oFilterItems = new sap.ui.core.Item({
+				"key": '{vbak>columns}',
+				"text": '{vbak>columns}'
+			});
+			oFilterSelect.bindItems('vbak>/columns', oFilterItems);
+
+			var IconTabFilterFilter = new sap.m.IconTabFilter({
+				"text": 'Filter',
+				"content": [
+					oFilterSelect
+				]
+			});
+
+			var oIconTabBar = new sap.m.IconTabBar({
+				"items": [
+					IconTabFilterColumns,
+					IconTabFilterSort,
+					IconTabFilterFilter
+				]
+			});
+
+			var oDialog = new sap.m.Dialog({
+				"height": '100%',
+				"width": '100%',
+				"contentHeight": '100%',
+				"contentWidth": '50%',
+				"beginButton" : [
+					new sap.m.Button({
+						"text" : 'Submit',
+						"press" : [this.onSettingsSubmit,this]
+					})
+					],
+				"endButton" : [
+						new sap.m.Button({
+						"text" : 'Close',
+						"press" : [this.onSettingsClose,this]
+					})
+					],
+				"content": [
+					oIconTabBar
+				]
+			});
+
+			this.getView().addDependent(oDialog);
+			oDialog.open();
+
+		},
+
+		onFilterSelect: function(oEvent) {
+			var selKey = oEvent.getSource().getSelectedKey();
+			var hLayout = new sap.ui.layout.HorizontalLayout({
+				"content": [
+					new sap.m.Label({
+						// class : 'sapUiSmallMarginTop'
+						"text": selKey
+					}),
+					new sap.m.Input({
+						"showValueHelp": true,
+						"width": '60%',
+						"valueHelpRequest" : [this.onFilterValueHelpRequest,this]
+							// class : 'sapUiLargeMarginBottom'
+					}),
+					new sap.m.Button({
+						"icon": 'sap-icon://decline',
+						"type": 'Transparent',
+						"press": [this.filterCancel, this]
+					})
+				]
+			});
+			hLayout.getContent()[1].addStyleClass('right2');
+			hLayout.getContent()[2].addStyleClass('right sapUiSmallMarginBegin');
+			var panel = new sap.m.Panel({
+				"content": [
+					hLayout
+				]
+			});
+			oEvent.getSource().getParent().addContent(panel);
+		},
+		filterCancel: function(oEvent) {
+			debugger;
+			oEvent.getSource().getParent().getParent().destroy();
+		},
+		sortSelect: function(oEvent) {
+			debugger;
+			var oSortSelect = new sap.m.Select({
+				"forceSelection": false,
+				"change": [this.sortSelect, this]
+			});
+			var oSortItems = new sap.ui.core.Item({
+				"key": '{vbak>columns}',
+				"text": '{vbak>columns}'
+			});
+			oSortSelect.bindItems('vbak>/columns', oSortItems);
+
+			var HBox = new sap.m.HBox({
+				"items": [
+					oSortSelect,
+					new sap.m.SegmentedButton({
+						buttons: [
+							new sap.m.Button({
+								"icon": 'sap-icon://sort-ascending',
+								"press": [this.sortAscDsc, this]
+							}),
+							new sap.m.Button({
+								"icon": 'sap-icon://sort-descending',
+								"press": [this.sortAscDsc, this]
+							})
+						]
+					}),
+					new sap.m.Text({
+						text: 'Ascending'
+					})
+					,
+					new sap.m.Button({
+						"icon": 'sap-icon://decline',
+						"type" : 'Transparent',
+						"visible" : false,
+						"press": [this.decline, this]
+					})
+				]
+			})
+			debugger;
+			oEvent.getSource().getParent().getParent().insertContent(HBox,0);
+		},
+		sortAscDsc: function(oEvent) {
+			debugger;
+			if (oEvent.getSource().getIcon().includes('descending')) {
+				oEvent.getSource().getParent().getParent().getItems()[2].setText('Descending');
+			} else {
+				oEvent.getSource().getParent().getParent().getItems()[2].setText('Ascending');
+			}
+		},
+		onLinkClick : function(oEvent){
+			alert('Under Construction');
+		},
+		onSettingsClose : function(oEvent){
+			oEvent.getSource().getParent().close();
+		},
+		onSettingsSubmit : function(oEvent){
+			debugger;
+		},
+		onFilterValueHelpRequest : function(oEvent){
+			this.selInput = oEvent.getSource();
+			debugger;
+			var label = oEvent.getSource().getParent().getContent()[0].getText();
+			var data = this.getView().getModel('vbak').getData().Header;
+			var vH = [];
+			for(var i=0;i<data.length;i++){
+				vH.push({'value' : data[i][label]});
+			}
+			
+			 this.getView().getModel('vbak').setProperty('/valueHelps',vH);
+			 
+			 var oListItems = new sap.m.StandardListItem({
+			 	"title" : '{vbak>value}',
+			 	'type' : 'Active',
+			 	"press" : [this.onFilterVH,this]
+			 });
+			 var oList = new sap.m.List({
+			 	"title" : label
+			 });
+			 
+			 oList.bindItems('vbak>/valueHelps',oListItems);
+			 
+			 var oDialog = new sap.m.Dialog({
+			 	"content" : [oList],
+			 	"endButton" : [
+						new sap.m.Button({
+						"text" : 'Close',
+						"press" : [this.onSettingsClose,this]
+					})
+					]
+			 });
+			 this.getView().addDependent(oDialog);
+			 oDialog.open();
+			 
+			 
+			 
+			
+		},
+		onFilterVH : function(oEvent){
+			var selValue = oEvent.getSource().getBindingContext('vbak').getObject().value;
+			this.selInput.setValue(selValue);
+			oEvent.getSource().getParent().getParent().close();
+			debugger;
+		},
+		decline : function(oEvent){
+			oEvent.getSource().getParent().destroy();
 		}
 
 		/**
