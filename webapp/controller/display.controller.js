@@ -319,7 +319,7 @@ sap.ui.define([
 									new sap.m.Link({
 										"text": "{" + "vbak>" + hdrRow[x] + "}",
 										class: "mystyle",
-										"press" : [that.onLinkClick,that]
+										"press": [that.onLinkClick, that]
 									})
 								);
 							} else {
@@ -793,7 +793,13 @@ sap.ui.define([
 					white,
 					green
 
-				]
+				],
+				"endButton" : [
+					new sap.m.Button({
+						"text" : "Close",
+						"press" : [this.onSettingsClose,this]
+					})
+					]
 			});
 			oDialog.setShowHeader(false);
 
@@ -843,6 +849,7 @@ sap.ui.define([
 			this.getView().getModel('vbak').setProperty('/columns', data);
 			var oTable = new sap.m.Table({
 				"mode": 'MultiSelect',
+				"multiSelectMode": 'SelectAll',
 				"headerToolbar": [
 					new sap.m.Toolbar({
 						"content": [
@@ -864,6 +871,7 @@ sap.ui.define([
 				],
 
 			});
+			oTable.selectAll();
 
 			var items = new sap.m.ColumnListItem({
 				"cells": [
@@ -912,12 +920,11 @@ sap.ui.define([
 
 							new sap.m.Text({
 								text: 'Ascending'
-							})
-							,
+							}),
 							new sap.m.Button({
 								"icon": 'sap-icon://decline',
 								"type": 'Transparent',
-								"visible" : false,
+								"visible": false,
 								"press": [this.decline, this]
 							})
 						]
@@ -956,18 +963,18 @@ sap.ui.define([
 				"width": '100%',
 				"contentHeight": '100%',
 				"contentWidth": '50%',
-				"beginButton" : [
+				"beginButton": [
 					new sap.m.Button({
-						"text" : 'Submit',
-						"press" : [this.onSettingsSubmit,this]
+						"text": 'Submit',
+						"press": [this.onSettingsSubmit, this]
 					})
-					],
-				"endButton" : [
-						new sap.m.Button({
-						"text" : 'Close',
-						"press" : [this.onSettingsClose,this]
+				],
+				"endButton": [
+					new sap.m.Button({
+						"text": 'Close',
+						"press": [this.onSettingsClose, this]
 					})
-					],
+				],
 				"content": [
 					oIconTabBar
 				]
@@ -989,7 +996,7 @@ sap.ui.define([
 					new sap.m.Input({
 						"showValueHelp": true,
 						"width": '60%',
-						"valueHelpRequest" : [this.onFilterValueHelpRequest,this]
+						"valueHelpRequest": [this.onFilterValueHelpRequest, this]
 							// class : 'sapUiLargeMarginBottom'
 					}),
 					new sap.m.Button({
@@ -1041,18 +1048,24 @@ sap.ui.define([
 					}),
 					new sap.m.Text({
 						text: 'Ascending'
-					})
-					,
+					}),
 					new sap.m.Button({
 						"icon": 'sap-icon://decline',
-						"type" : 'Transparent',
-						"visible" : false,
+						"type": 'Transparent',
+						"visible": false,
 						"press": [this.decline, this]
 					})
 				]
 			})
 			debugger;
-			oEvent.getSource().getParent().getParent().insertContent(HBox,0);
+			var len = oEvent.getSource().getParent().getParent().getContent().length;
+			if (len == 1) {
+				oEvent.getSource().getParent().getParent().getContent()[len - 1].getItems()[3].setVisible(true);
+			} else {
+				oEvent.getSource().getParent().getParent().getContent()[len - 2].getItems()[3].setVisible(true);
+			}
+
+			oEvent.getSource().getParent().getParent().insertContent(HBox, 0);
 		},
 		sortAscDsc: function(oEvent) {
 			debugger;
@@ -1062,61 +1075,182 @@ sap.ui.define([
 				oEvent.getSource().getParent().getParent().getItems()[2].setText('Ascending');
 			}
 		},
-		onLinkClick : function(oEvent){
-			alert('Under Construction');
+		onLinkClick: function(oEvent) {
+			// alert('Under Construction');
+			debugger;
+			var selItem = oEvent.getSource().getParent().getBindingContext('vbak').getObject();
+			var keys = Object.keys(selItem);
+			var values = Object.values(selItem);
+			
+			var selData = [];
+			var oSimpleForm = new sap.ui.layout.form.SimpleForm({
+			   "labelSpanL" : 3,
+			   "labelSpanM" : 3,
+			   "emptySpanL" : 4,
+			   "emptySpanM" : 4,
+			   "columnsL" : 3,
+			   "columnsM" : 3
+			   
+			});
+			
+			for(var i=0;i<keys.length;i++){
+				// var data = {
+				//   "keys" : keys[i],
+				//   "values" : values[i]
+				// };
+				// selData.push(data);
+				
+				oSimpleForm.addContent(
+					new sap.m.Label({
+						"text" :  keys[i]
+					})
+				);
+				
+				oSimpleForm.addContent(
+					new sap.m.Text({
+						"text" :  values[i]
+					})
+				);
+			}
+			
+			var oDialog = new sap.m.Dialog({
+				"title" : "Preview",
+				"content" : [oSimpleForm],
+				"endButton" : [
+					new sap.m.Button({
+						"text" : "Close",
+						"press" : [this.onSettingsClose,this]
+					})
+					]
+			});
+			
+			this.getView().addDependent(oDialog);
+			oDialog.open();
+			
+			
+			
+			
+			
 		},
-		onSettingsClose : function(oEvent){
+		onSettingsClose: function(oEvent) {
 			oEvent.getSource().getParent().close();
 		},
-		onSettingsSubmit : function(oEvent){
+		onSettingsSubmit: function(oEvent) {
 			debugger;
+			//Columns in Settings button Dialog
+			var cols = [];
+			var colLen = oEvent.getSource().getParent().getContent()[0].getItems()[0].getContent()[0].getSelectedItems().length;
+			for (var i = 0; i < colLen; i++) {
+				var selCol = oEvent.getSource().getParent().getContent()[0].getItems()[0].getContent()[0].getSelectedItems()[i].getBindingContext(
+					'vbak').getObject().columns
+				cols.push(selCol);
+			}
+
+			//Sort in Settings button Dialog
+			var sort = [];
+			var sortLen = oEvent.getSource().getParent().getContent()[0].getItems()[1].getContent().length;
+			for (i = 1; i < sortLen; i++) {
+				var data = {
+					"selKey": oEvent.getSource().getParent().getContent()[0].getItems()[1].getContent()[i].getItems()[0].getSelectedKey(),
+					"sort": oEvent.getSource().getParent().getContent()[0].getItems()[1].getContent()[i].getItems()[2].getText()
+				};
+				sort.push(data);
+
+			}
+
+			var last = sort[sort.length - 1];
+			if(last !== undefined) {
+			var mData = this.getView().getModel('vbak').getData().Header;
+			if (last.sort == "Ascending") {
+				// mData.sort((a,b) => a['selKey'] - b['selKey']);
+				mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? 1 : -1);
+			} else {
+				// mData.sort((a,b) => b['selKey'] - a['selKey']);
+				mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? -1 : 1);
+
+			}
+
+			this.getView().getModel('vbak').refresh(true);
+			
+		}
+
+			//Filter in Settings button Dialog
+			var filter = [];
+			// var panelContent = oEvent.getSource().getParent().getContent()[0].getItems()[2].getContent()[1].getContent();
+			var panelContent = oEvent.getSource().getParent().getContent()[0].getItems()[2].getContent();
+
+			for (i = 1; i < panelContent.length; i++) {
+				var ofilter = {
+					"label": oEvent.getSource().getParent().getContent()[0].getItems()[2].getContent()[i].getContent()[0].getContent()[0].getText(),
+					"input": oEvent.getSource().getParent().getContent()[0].getItems()[2].getContent()[i].getContent()[0].getContent()[1].getValue()
+				}
+				filter.push(ofilter);
+			}
+
+			var filters = [];
+			for (i = 0; i < filter.length; i++) {
+				filters.push(
+					new Filter({
+						"path": filter[i]["label"],
+						"operator": FilterOperator.Contains,
+						"value1": filter[i]["input"]
+					})
+				);
+			};
+			
+			var oFilter = new Filter({
+				"filters" : filters
+			});
+			
+			sap.ui.getCore().byId('idTable').getBinding('items').filter(oFilter);
+
+			oEvent.getSource().getParent().close();
 		},
-		onFilterValueHelpRequest : function(oEvent){
+		onFilterValueHelpRequest: function(oEvent) {
 			this.selInput = oEvent.getSource();
 			debugger;
 			var label = oEvent.getSource().getParent().getContent()[0].getText();
 			var data = this.getView().getModel('vbak').getData().Header;
 			var vH = [];
-			for(var i=0;i<data.length;i++){
-				vH.push({'value' : data[i][label]});
+			for (var i = 0; i < data.length; i++) {
+				vH.push({
+					'value': data[i][label]
+				});
 			}
-			
-			 this.getView().getModel('vbak').setProperty('/valueHelps',vH);
-			 
-			 var oListItems = new sap.m.StandardListItem({
-			 	"title" : '{vbak>value}',
-			 	'type' : 'Active',
-			 	"press" : [this.onFilterVH,this]
-			 });
-			 var oList = new sap.m.List({
-			 	"title" : label
-			 });
-			 
-			 oList.bindItems('vbak>/valueHelps',oListItems);
-			 
-			 var oDialog = new sap.m.Dialog({
-			 	"content" : [oList],
-			 	"endButton" : [
-						new sap.m.Button({
-						"text" : 'Close',
-						"press" : [this.onSettingsClose,this]
+
+			this.getView().getModel('vbak').setProperty('/valueHelps', vH);
+
+			var oListItems = new sap.m.StandardListItem({
+				"title": '{vbak>value}',
+				'type': 'Active',
+				"press": [this.onFilterVH, this]
+			});
+			var oList = new sap.m.List({
+				"title": label
+			});
+
+			oList.bindItems('vbak>/valueHelps', oListItems);
+
+			var oDialog = new sap.m.Dialog({
+				"content": [oList],
+				"endButton": [
+					new sap.m.Button({
+						"text": 'Close',
+						"press": [this.onSettingsClose, this]
 					})
-					]
-			 });
-			 this.getView().addDependent(oDialog);
-			 oDialog.open();
-			 
-			 
-			 
-			
+				]
+			});
+			this.getView().addDependent(oDialog);
+			oDialog.open();
+
 		},
-		onFilterVH : function(oEvent){
+		onFilterVH: function(oEvent) {
 			var selValue = oEvent.getSource().getBindingContext('vbak').getObject().value;
 			this.selInput.setValue(selValue);
 			oEvent.getSource().getParent().getParent().close();
 			debugger;
 		},
-		decline : function(oEvent){
+		decline: function(oEvent) {
 			oEvent.getSource().getParent().destroy();
 		}
 
