@@ -73,60 +73,60 @@ sap.ui.define([
 		onhandleUpload: function(oEvent) {
 			// var oTable = new Table();
 			/*
-			var oTable = new Table({
-				"columns" : [
-					new sap.m.Column({
-						"header" : [new sap.m.Label({
-							"text" : 'Sales Order'
-						})]
-					}),
-					new sap.m.Column({
-						"header" : [new sap.m.Label({
-							"text" : 'Customer Name'
-						})]
-					}),
-					new sap.m.Column({
-						"header" : [new sap.m.Label({
-							"text" : 'Invoice'
-						})]
-					}),
-					new sap.m.Column({
-						"header" : [new sap.m.Label({
-							"text" : 'Inquiry'
-						})]
-					}),
-					new sap.m.Column({
-						"header" : [new sap.m.Label({
-							"text" : 'Billing/Delivery'
-						})]
-					})
-					]
-			});
+						var oTable = new Table({
+							"columns" : [
+								new sap.m.Column({
+									"header" : [new sap.m.Label({
+										"text" : 'Sales Order'
+									})]
+								}),
+								new sap.m.Column({
+									"header" : [new sap.m.Label({
+										"text" : 'Customer Name'
+									})]
+								}),
+								new sap.m.Column({
+									"header" : [new sap.m.Label({
+										"text" : 'Invoice'
+									})]
+								}),
+								new sap.m.Column({
+									"header" : [new sap.m.Label({
+										"text" : 'Inquiry'
+									})]
+								}),
+								new sap.m.Column({
+									"header" : [new sap.m.Label({
+										"text" : 'Billing/Delivery'
+									})]
+								})
+								]
+						});
 			
-			var items = new sap.m.ColumnListItem({
-			   "cells" : [
-			   	new sap.m.Text({
-			   		'text' : '{vbak>vbap}'
-			   	}),
-			   		new sap.m.Text({
-			   		'text' : '{vbak>vbap}'
-			   	}),
-			   		new sap.m.Text({
-			   		'text' : '{vbak>vbap}'
-			   	}),
-			   		new sap.m.Text({
-			   		'text' : '{vbak>vbap}'
-			   	}),
-			   		new sap.m.Text({
-			   		'text' : '{vbak>vbap}'
-			   	})
-			   	]	
-			});
+						var items = new sap.m.ColumnListItem({
+						   "cells" : [
+						   	new sap.m.Text({
+						   		'text' : '{vbak>vbap}'
+						   	}),
+						   		new sap.m.Text({
+						   		'text' : '{vbak>vbap}'
+						   	}),
+						   		new sap.m.Text({
+						   		'text' : '{vbak>vbap}'
+						   	}),
+						   		new sap.m.Text({
+						   		'text' : '{vbak>vbap}'
+						   	}),
+						   		new sap.m.Text({
+						   		'text' : '{vbak>vbap}'
+						   	})
+						   	]	
+						});
 			
 			
-			this.getView().byId('idPage').addContent(oTable);
+						this.getView().byId('idPage').addContent(oTable);
 			
-			*/
+						*/
 
 			var that = this;
 			var fileUploader = oEvent.getSource();
@@ -302,6 +302,21 @@ sap.ui.define([
 								new sap.m.Button({
 									"icon": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Spinning_Ashoka_Chakra.gif",
 									press: [that.onWheel, that]
+								})
+							);
+
+							oTable.addColumn(
+								new sap.m.Column({
+									"header": [new sap.m.Label({
+										"text": hdrRow2[x]
+									})]
+								})
+							);
+
+							items.addCell(
+								new sap.m.Text({
+									"text": "{" + "vbak>" + hdrRow[x] + "}",
+									class: "mystyle"
 								})
 							);
 
@@ -794,12 +809,12 @@ sap.ui.define([
 					green
 
 				],
-				"endButton" : [
+				"endButton": [
 					new sap.m.Button({
-						"text" : "Close",
-						"press" : [this.onSettingsClose,this]
+						"text": "Close",
+						"press": [this.onSettingsClose, this]
 					})
-					]
+				]
 			});
 			oDialog.setShowHeader(false);
 
@@ -871,7 +886,6 @@ sap.ui.define([
 				],
 
 			});
-			oTable.selectAll();
 
 			var items = new sap.m.ColumnListItem({
 				"cells": [
@@ -881,6 +895,12 @@ sap.ui.define([
 				]
 			});
 			oTable.bindItems('vbak>/columns', items);
+
+			var tempModel = new JSONModel();
+			tempModel.loadData('./model/temp.json');
+			tempModel.attachRequestCompleted(function() {
+				oTable.selectAll(true);
+			});
 
 			var IconTabFilterColumns = new sap.m.IconTabFilter({
 				"text": 'Columns',
@@ -932,6 +952,10 @@ sap.ui.define([
 
 				]
 			});
+
+			IconTabFilterSort.getContent()[0].getItems()[1].addStyleClass('sapUiMediumMarginBegin');
+			IconTabFilterSort.getContent()[0].getItems()[2].addStyleClass('sapUiMediumMarginBegin sapUiTinyMarginTop');
+			IconTabFilterSort.getContent()[0].getItems()[3].addStyleClass('sapUiMediumMarginBegin');
 
 			var oFilterSelect = new sap.m.Select({
 				"forceSelection": false,
@@ -1065,6 +1089,10 @@ sap.ui.define([
 				oEvent.getSource().getParent().getParent().getContent()[len - 2].getItems()[3].setVisible(true);
 			}
 
+			HBox.getItems()[1].addStyleClass('sapUiMediumMarginBegin');
+			HBox.getItems()[2].addStyleClass('sapUiMediumMarginBegin sapUiTinyMarginTop');
+			HBox.getItems()[3].addStyleClass('sapUiMediumMarginBegin');
+
 			oEvent.getSource().getParent().getParent().insertContent(HBox, 0);
 		},
 		sortAscDsc: function(oEvent) {
@@ -1081,56 +1109,52 @@ sap.ui.define([
 			var selItem = oEvent.getSource().getParent().getBindingContext('vbak').getObject();
 			var keys = Object.keys(selItem);
 			var values = Object.values(selItem);
-			
+
 			var selData = [];
 			var oSimpleForm = new sap.ui.layout.form.SimpleForm({
-			   "labelSpanL" : 3,
-			   "labelSpanM" : 3,
-			   "emptySpanL" : 4,
-			   "emptySpanM" : 4,
-			   "columnsL" : 3,
-			   "columnsM" : 3
-			   
+				"labelSpanL": 3,
+				"labelSpanM": 3,
+				"emptySpanL": 4,
+				"emptySpanM": 4,
+				"columnsL": 3,
+				"columnsM": 3
+
 			});
-			
-			for(var i=0;i<keys.length;i++){
+
+			for (var i = 0; i < keys.length; i++) {
 				// var data = {
 				//   "keys" : keys[i],
 				//   "values" : values[i]
 				// };
 				// selData.push(data);
-				
+
 				oSimpleForm.addContent(
 					new sap.m.Label({
-						"text" :  keys[i]
+						"text": keys[i]
 					})
 				);
-				
+
 				oSimpleForm.addContent(
 					new sap.m.Text({
-						"text" :  values[i]
+						"text": values[i]
 					})
 				);
 			}
-			
+
 			var oDialog = new sap.m.Dialog({
-				"title" : "Preview",
-				"content" : [oSimpleForm],
-				"endButton" : [
+				"title": "Preview",
+				"content": [oSimpleForm],
+				"endButton": [
 					new sap.m.Button({
-						"text" : "Close",
-						"press" : [this.onSettingsClose,this]
+						"text": "Close",
+						"press": [this.onSettingsClose, this]
 					})
-					]
+				]
 			});
-			
+
 			this.getView().addDependent(oDialog);
 			oDialog.open();
-			
-			
-			
-			
-			
+
 		},
 		onSettingsClose: function(oEvent) {
 			oEvent.getSource().getParent().close();
@@ -1146,6 +1170,75 @@ sap.ui.define([
 				cols.push(selCol);
 			}
 
+			var tabItems = sap.ui.getCore().byId('idTable').getItems();
+			var tabCells = sap.ui.getCore().byId('idTable').getItems()[0].getCells();
+
+			var flag = '';
+			var y;
+			for (y = 0; y < tabCells.length; y++) {
+				flag = '';
+				for (var x = 0; x < cols.length; x++) {
+
+					if (flag !== 'X') {
+						flag = y;
+					}
+					var cell = sap.ui.getCore().byId('idTable').getItems()[0].getCells()[y].getBindingInfo('text');
+
+					if (cell !== undefined) {
+						var cellPath = cell.binding.getPath();
+						if (cols[x] == cellPath) {
+							// sap.ui.getCore().byId('idTable').getItems()[i].getCells()[y].setVisible(true);
+							sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(true);
+							flag = 'X';
+							break;
+
+						}
+						// else{
+						// 	// sap.ui.getCore().byId('idTable').getItems()[i].getCells()[y].setVisible(false);
+						// 	if(sap.ui.getCore().byId('idTable').getColumns()[y].getAggregation('header').getText() == ''){
+						// 	   sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(true);	
+						// 	}
+						// 	else{
+						// 		sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(false);
+						// 	}
+
+						// }
+					}
+				}
+
+				if (flag !== 'X') {
+					// sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(false);
+					if (sap.ui.getCore().byId('idTable').getColumns()[flag].getAggregation('header').getText() == '') {
+						sap.ui.getCore().byId('idTable').getColumns()[flag].setVisible(true);
+						flag = '';
+					} else {
+						sap.ui.getCore().byId('idTable').getColumns()[flag].setVisible(false);
+						flag = '';
+					}
+				}
+			}
+
+			// for(i=0;i<tabItems.length;i++){
+			// 	for(var x=0;x<cols.length;x++){
+			// 		for(var y=0;y<tabCells.length;y++){
+			// 			var cell = sap.ui.getCore().byId('idTable').getItems()[0].getCells()[y].getBindingInfo('text');
+
+			// 			if(cell !== undefined){
+			// 			var cellPath = cell.binding.getPath();
+			// 			if(cols[x] == cellPath){
+			// 				sap.ui.getCore().byId('idTable').getItems()[i].getCells()[y].setVisible(true);
+			// 				sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(true);
+
+			// 			}
+			// 			else{
+			// 				sap.ui.getCore().byId('idTable').getItems()[i].getCells()[y].setVisible(false);
+			// 				sap.ui.getCore().byId('idTable').getColumns()[y].setVisible(false);
+			// 			}
+			// 			}
+			// 		}
+			// 	}
+			// }
+
 			//Sort in Settings button Dialog
 			var sort = [];
 			var sortLen = oEvent.getSource().getParent().getContent()[0].getItems()[1].getContent().length;
@@ -1159,20 +1252,20 @@ sap.ui.define([
 			}
 
 			var last = sort[sort.length - 1];
-			if(last !== undefined) {
-			var mData = this.getView().getModel('vbak').getData().Header;
-			if (last.sort == "Ascending") {
-				// mData.sort((a,b) => a['selKey'] - b['selKey']);
-				mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? 1 : -1);
-			} else {
-				// mData.sort((a,b) => b['selKey'] - a['selKey']);
-				mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? -1 : 1);
+			if (last !== undefined) {
+				var mData = this.getView().getModel('vbak').getData().Header;
+				if (last.sort == "Ascending") {
+					// mData.sort((a,b) => a['selKey'] - b['selKey']);
+					mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? 1 : -1);
+				} else {
+					// mData.sort((a,b) => b['selKey'] - a['selKey']);
+					mData.sort((a, b) => a[last.selKey] > b[last.selKey] ? -1 : 1);
+
+				}
+
+				this.getView().getModel('vbak').refresh(true);
 
 			}
-
-			this.getView().getModel('vbak').refresh(true);
-			
-		}
 
 			//Filter in Settings button Dialog
 			var filter = [];
@@ -1186,23 +1279,24 @@ sap.ui.define([
 				}
 				filter.push(ofilter);
 			}
+			if (filter.length > 0) {
+				var filters = [];
+				for (i = 0; i < filter.length; i++) {
+					filters.push(
+						new Filter({
+							"path": filter[i]["label"],
+							"operator": FilterOperator.Contains,
+							"value1": filter[i]["input"]
+						})
+					);
+				};
 
-			var filters = [];
-			for (i = 0; i < filter.length; i++) {
-				filters.push(
-					new Filter({
-						"path": filter[i]["label"],
-						"operator": FilterOperator.Contains,
-						"value1": filter[i]["input"]
-					})
-				);
-			};
-			
-			var oFilter = new Filter({
-				"filters" : filters
-			});
-			
-			sap.ui.getCore().byId('idTable').getBinding('items').filter(oFilter);
+				var oFilter = new Filter({
+					"filters": filters
+				});
+
+				sap.ui.getCore().byId('idTable').getBinding('items').filter(oFilter);
+			}
 
 			oEvent.getSource().getParent().close();
 		},
