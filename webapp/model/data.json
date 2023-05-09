@@ -1,0 +1,64 @@
+{
+	"results": [{
+		"name": "Apple",
+		"categories": [{
+				"name": "Laptops",
+				"categories": [{
+					"name": "Macbooks",
+					"categories": [{
+							"name": "MacBook Air – 13.6 inch (M2, 2022)",
+							"amount": 16.99,
+							"currency": "EUR",
+							"size": "S"
+						},
+						{
+							"name": "MacBook Air -13.3 inch (M1, 2020)",
+							"amount": 47.99,
+							"currency": "EUR",
+							"size": "M"
+						},
+						{
+							"name": "MacBook Air -13.3 inch (Intel, 2019)",
+							"amount": 103.99,
+							"currency": "USD",
+							"size": "L"
+						}
+					]
+				}]
+			},
+			{
+				"name": "Iphones",
+				"categories": [{
+						"name": "Apple Iphone 14",
+						"amount": 16.99,
+						"currency": "USD"
+					},
+					{
+						"name": "Apple Iphone 14 Plus",
+						"amount": 47.99,
+						"currency": "USD"
+					},
+					{
+						"name": "Apple Iphone 14 Pro Max",
+						"amount": 399.99,
+						"currency": "USD"
+					}
+				]
+			},
+			{
+				"name": "Headphones",
+				"categories": [{
+						"name": "Apple AirPods Pro (2nd Generation)",
+						"amount": 16.99,
+						"currency": "USD"
+					},
+					{
+						"name": "Apple AirPods Pro With MagSafe",
+						"amount": 47.99,
+						"currency": "USD"
+					}
+				]
+			}
+		]
+	}]
+}

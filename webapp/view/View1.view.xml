@@ -1,0 +1,203 @@
+<mvc:View xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" controllerName="com.dp.sample1.controller.View1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:u="sap.ui.unified"
+    xmlns:f='sap.ui.layout.form'
+    xmlns:l='sap.ui.layout'
+    xmlns:t="sap.ui.table"
+    xmlns:w="sap.ui.webc.main">
+    <!-- <App id="_IDGenApp1">
+        <pages>
+            <Page id='idPage' title='Sample Application'>
+                <Button id='idBtn' text='Click Me!!' press='onPress'/>
+            </Page>
+        </pages>
+
+    </App> -->
+
+    <SplitApp id='splitApp'>
+        <masterPages>
+            <Page title='Products'>
+                <content>
+                    <!-- <List items='{jsonModel>/items}'>
+						<items>
+							<StandardListItem type='Active' press='onMasterSelect' description='{jsonModel>name}' info='{jsonModel>category}' title='{jsonModel>id}'></StandardListItem>
+						</items>
+					</List> -->
+                    <t:TreeTable rows='{jsonModel>/results}'>
+                        <t:columns>
+                            <t:Column width="8rem">
+                                <Label text="Products"/>
+                                <t:template>
+                                    <Text text="{jsonModel>name}" wrapping="false" />
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="4rem">
+                                <Label text="Price"/>
+                                <t:template>
+                                    <Text text="{jsonModel>amount}" wrapping="false" />
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="5rem">
+                                <Label text="Check Out"/>
+                                <t:template>
+                                    <Button text='Buy' width='20%' press='onBuy' type='Success' visible="{= ${jsonModel>amount} > 0 ? true : false }"/>
+                                </t:template>
+                            </t:Column>
+                            
+                        </t:columns>
+                    </t:TreeTable>
+
+
+
+                </content>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page id='idDetail' title='Product Details'>
+            <!-- </Page>
+            <Page id='detaildetail' title='Details'> -->
+                <content>
+                    <!-- <ObjectHeader backgroundDesign="Solid" id='objectheader' intro='{jsonModel>id}' title='{jsonModel>name}'>
+                        <attributes>
+                            <ObjectAttribute title='{jsonModel>url}'></ObjectAttribute>
+                        </attributes>
+
+                    </ObjectHeader> -->
+
+                    <IconTabBar>
+                      <items>
+                         <IconTabFilter text='Product Details' icon='sap-icon://home'>
+                          <content>
+                             <f:SimpleForm id='idSF1'>
+                                 <f:content>
+                                     <Label text='Company'/>
+                                     <Text text='{jsonModel>/buy/company}' />
+
+                                     <Label text='Product Type'/>
+                                     <Text text='{jsonModel>/buy/type}' />
+
+                                     <Label text='Model'/>
+                                     <Text text='{jsonModel>/buy/model}' />
+
+                                     <Label text='Price'/>
+                                     <Text text='{jsonModel>/buy/price}' />
+
+                                     <Label text='Currency'/>
+                                     <Text text='{jsonModel>/buy/currency}' />
+                                 </f:content>
+
+                             </f:SimpleForm>
+                          </content>
+                         </IconTabFilter>
+                        
+
+                         <IconTabFilter text='Check Out' icon='sap-icon://credit-card'>
+                          <content>
+                              <f:SimpleForm editable="true">
+                                 <f:content>
+                                     <Label text='Company'/>
+                                     <Text text='{jsonModel>/buy/company}' />
+
+                                     <Label text='Product Type'/>
+                                     <Text text='{jsonModel>/buy/type}' />
+
+                                     <Label text='Model'/>
+                                     <Text text='{jsonModel>/buy/model}' />
+
+                                     <Label text='Price'/>
+                                     <Text text='{jsonModel>/buy/price}' />
+
+                                     <Label text='Currency'/>
+                                     <Text text='{jsonModel>/buy/currency}' />
+
+                                    <Label text='Quantity'/>
+                                    <StepInput value="{jsonModel>/buy/quantity}" width="20%" 
+                                    visible="{= ${jsonModel>/buy/price} > 0 ? true : false }"></StepInput>
+
+                                  <Bar>
+                                   <contentRight>
+                                        <Button text='Buy Now' press='onCheckOut' type='Emphasized'></Button>
+                                   </contentRight>
+                                  </Bar>
+                                 </f:content>
+                                 
+
+                             </f:SimpleForm>
+                          </content>
+                         </IconTabFilter>
+
+
+                          <IconTabFilter text='Orders' icon='sap-icon://expand-all'>
+                          <content>
+                            <Table items='{jsonModel>/orders}'>
+                              <columns>
+                                <Column>
+                                  <Label text='Brand'></Label>
+                                </Column>
+                                <Column>
+                                  <Label text='Category'></Label>
+                                </Column>
+                                <Column>
+                                  <Label text='Product'></Label>
+                                </Column>
+                                <Column>
+                                  <Label text='Price'></Label>
+                                </Column>
+                                <Column>
+                                  <Label text='Currency'></Label>
+                                </Column>
+                                <Column>
+                                  <Label text='Quantity'></Label>
+                                </Column>
+                              </columns>
+                              <items>
+                              <ColumnListItem >
+                               <cells>
+                                 <Text text='{jsonModel>company}'></Text>
+                                 <Text text='{jsonModel>type}'></Text>
+                                 <Text text='{jsonModel>model}'></Text>
+                                 <Text text='{jsonModel>price}'></Text>
+                                 <Text text='{jsonModel>currency}'></Text>
+                                 <Text text='{jsonModel>quantity}'></Text>
+                               </cells>
+                              </ColumnListItem>
+                              </items>
+                            </Table>
+                          </content>
+                         </IconTabFilter>
+
+
+
+                          <IconTabFilter text='Similar Products' icon='sap-icon://list'>
+                          <content>
+                             <f:SimpleForm>
+                                 <f:content>
+                                     <Label text='Company'/>
+                                     <Text text='{jsonModel>/buy/company}'/>
+
+                                     <Label text='Address'/>
+                                     <Text text='{product}' />
+
+                                     <Label text='Country'/>
+                                     <Text text='{country}' />
+
+                                     <Label text='Phone'/>
+                                     <Text text='{phone}' />
+                                 </f:content>
+
+                             </f:SimpleForm>
+                          </content>
+                         </IconTabFilter>
+
+
+                      </items>
+                    </IconTabBar>
+
+                </content>
+            </Page>
+        </detailPages>
+    </SplitApp>
+
+</mvc:View>
